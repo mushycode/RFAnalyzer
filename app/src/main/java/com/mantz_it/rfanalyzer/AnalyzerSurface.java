@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import com.mantz_it.rfanalyzer.WindowSlider;
+import java.util.*;
 
 /**
  * <h1>RF Analyzer - Analyzer Surface</h1>
@@ -104,6 +106,8 @@ public class AnalyzerSurface extends SurfaceView implements SurfaceHolder.Callba
 	private long lastFrequency;				// Center frequency of the last packet of fft samples
 	private int lastSampleRate;				// Sample rate of the last packet of fft samples
 
+	private WindowSlider slider;
+
 	private boolean displayRelativeFrequencies = false; // indicates whether frequencies on the horizontal axis should be
 														// relative to the center frequency (true) or absolute (false)
 
@@ -163,6 +167,9 @@ public class AnalyzerSurface extends SurfaceView implements SurfaceHolder.Callba
 		this.squelchPaint = new Paint();
 		this.squelchPaint.setColor(Color.RED);
 
+		this.slider = new WindowSlider(this);
+		Timer timer = new Timer();
+		timer.schedule(this.slider, 10, 30);
 		// Add a Callback to get informed when the dimensions of the SurfaceView changes:
 		this.getHolder().addCallback(this);
 
