@@ -1,66 +1,4 @@
-
-Conversation opened. 3 messages. 1 message unread.
-
-
-		Skip to content
-		Using Gmail with screen readers
-		Search
-
-
-
-		Click here to enable desktop notifications for Gmail.   Learn more  Hide
-		Gmail
-		COMPOSE
-		Labels
-		Inbox (5,800)
-		Starred
-		Important
-		Sent Mail
-		Drafts (11)
-		Circles
-		Personal
-		Travel
-		More
-		Hangouts
-
-
-
-		More
-		2 of 6,961
-
-		Expand all Print all In new window
-		(no subject)
-		Inbox
-		x
-
-		Meenakshi Alagesan
-		apply plugin: 'com.android.application' android { compileSdkVersion 23 buildT...
-		Jun 15 (3 days ago)
-
-		arun varghese
-public changeFrequency(float newFreq, boolean isTuneToFreqBandwidth, float fr...
-		Jun 17 (1 day ago)
-
-		Meenakshi Alagesan
-		Attachments9:29 AM (2 hours ago)
-
-		to me
-
-		2 Attachments
-
-
-		Click here to Reply or Forward
-		0.96 GB (6%) of 15 GB used
-		Manage
-		Terms - Privacy
-		Last account activity: 0 minutes ago
-		Details
-		Nemo Ifone
-		Friends
-
-		Show details
-
-		package com.mantz_it.rfanalyzer;
+package com.mantz_it.rfanalyzer;
 
 		import android.app.Activity;
 		import android.app.AlertDialog;
@@ -1008,18 +946,18 @@ public class MainActivity extends Activity implements IQSourceInterface.Callback
 		// update action bar:
 		updateActionBar();
 	}
-	public void changeFrequency(float newFreq, boolean isTuneToFreqBandwidth, float bandwidth) {
+	public void changeFrequency(Float newFreq, boolean isTuneToFreqBandwidth, Float bandwidth) {
 		if (newFreq <= source.getMaxFrequency() && newFreq >= source.getMinFrequency()) {
-			source.setFrequency((long) newFreq);
-			analyzerSurface.setVirtualFrequency((long) newFreq);
+			source.setFrequency(newFreq.longValue());
+			analyzerSurface.setVirtualFrequency(newFreq.longValue());
 			if (demodulationMode != Demodulator.DEMODULATION_OFF)
 				analyzerSurface.setDemodulationEnabled(true);    // This will re-adjust the channel freq correctly
 
 			if (bandwidth != null && isTuneToFreqBandwidth) {
                 if (bandwidth > source.getMaxSampleRate())
-                    bandwidth = source.getMaxFrequency();
-                source.setSampleRate(source.getNextHigherOptimalSampleRate((int) bandwidth));
-                analyzerSurface.setVirtualSampleRate((int) bandwidth);
+                    bandwidth = new Float(source.getMaxFrequency());
+                source.setSampleRate(source.getNextHigherOptimalSampleRate(Math.round(bandwidth)));
+                analyzerSurface.setVirtualSampleRate(Math.round(bandwidth));
             }
 
 		}

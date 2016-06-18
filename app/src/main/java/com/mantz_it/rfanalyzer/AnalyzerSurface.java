@@ -167,9 +167,6 @@ public class AnalyzerSurface extends SurfaceView implements SurfaceHolder.Callba
 		this.squelchPaint = new Paint();
 		this.squelchPaint.setColor(Color.RED);
 
-		this.slider = new WindowSlider(this);
-		Timer timer = new Timer();
-		timer.schedule(this.slider, 10, 30);
 		// Add a Callback to get informed when the dimensions of the SurfaceView changes:
 		this.getHolder().addCallback(this);
 

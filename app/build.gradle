@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.mantz_it.rfanalyzer"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 21
         versionCode 12
         versionName "1.12"

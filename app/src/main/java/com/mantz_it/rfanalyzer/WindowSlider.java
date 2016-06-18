@@ -28,8 +28,9 @@ public class WindowSlider extends TimerTask{
 		this.updateWindow();
 	}
 	public void updateWindow(){
-		this.activity.changeFrequency(this.activity.analyzerSurface.getVirtualFrequency()+
-				100,true,this.activity.analyzerSurface.getVirtualSampleRate());
+		Float newFreq = new Float(this.activity.analyzerSurface.getVirtualFrequency()+ 100);
+		Float bW = new Float(this.activity.analyzerSurface.getVirtualSampleRate());
+		this.activity.changeFrequency(newFreq,true,bW);
 		//this.windowEndFrequency += this.windowLength;
 		if(this.activity.analyzerSurface.getVirtualFrequency() > 60000) System.exit(0);
 	}
