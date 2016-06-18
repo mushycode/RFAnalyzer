@@ -1,46 +1,108 @@
-package com.mantz_it.rfanalyzer;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.media.AudioManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
+Conversation opened. 3 messages. 1 message unread.
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
+		Skip to content
+		Using Gmail with screen readers
+		Search
+
+
+
+		Click here to enable desktop notifications for Gmail.   Learn more  Hide
+		Gmail
+		COMPOSE
+		Labels
+		Inbox (5,800)
+		Starred
+		Important
+		Sent Mail
+		Drafts (11)
+		Circles
+		Personal
+		Travel
+		More
+		Hangouts
+
+
+
+		More
+		2 of 6,961
+
+		Expand all Print all In new window
+		(no subject)
+		Inbox
+		x
+
+		Meenakshi Alagesan
+		apply plugin: 'com.android.application' android { compileSdkVersion 23 buildT...
+		Jun 15 (3 days ago)
+
+		arun varghese
+public changeFrequency(float newFreq, boolean isTuneToFreqBandwidth, float fr...
+		Jun 17 (1 day ago)
+
+		Meenakshi Alagesan
+		Attachments9:29 AM (2 hours ago)
+
+		to me
+
+		2 Attachments
+
+
+		Click here to Reply or Forward
+		0.96 GB (6%) of 15 GB used
+		Manage
+		Terms - Privacy
+		Last account activity: 0 minutes ago
+		Details
+		Nemo Ifone
+		Friends
+
+		Show details
+
+		package com.mantz_it.rfanalyzer;
+
+		import android.app.Activity;
+		import android.app.AlertDialog;
+		import android.content.ActivityNotFoundException;
+		import android.content.DialogInterface;
+		import android.content.Intent;
+		import android.content.SharedPreferences;
+		import android.content.pm.ActivityInfo;
+		import android.media.AudioManager;
+		import android.net.Uri;
+		import android.os.Bundle;
+		import android.os.Environment;
+		import android.preference.PreferenceManager;
+		import android.text.Editable;
+		import android.text.TextWatcher;
+		import android.util.Log;
+		import android.view.Menu;
+		import android.view.MenuItem;
+		import android.view.View;
+		import android.view.WindowManager;
+		import android.widget.AdapterView;
+		import android.widget.ArrayAdapter;
+		import android.widget.CheckBox;
+		import android.widget.CompoundButton;
+		import android.widget.EditText;
+		import android.widget.FrameLayout;
+		import android.widget.LinearLayout;
+		import android.widget.ScrollView;
+		import android.widget.SeekBar;
+		import android.widget.Spinner;
+		import android.widget.Switch;
+		import android.widget.TextView;
+		import android.widget.Toast;
+
+		import java.io.BufferedOutputStream;
+		import java.io.File;
+		import java.io.FileNotFoundException;
+		import java.io.FileOutputStream;
+		import java.text.SimpleDateFormat;
+		import java.util.Date;
+		import java.util.Locale;
+		import java.util.Timer;
 /**
  * <h1>RF Analyzer - Main Activity</h1>
  *
@@ -72,7 +134,7 @@ public class MainActivity extends Activity implements IQSourceInterface.Callback
 	private MenuItem mi_demodulationMode = null;
 	private MenuItem mi_record = null;
 	private FrameLayout fl_analyzerFrame = null;
-	private AnalyzerSurface analyzerSurface = null;
+	public AnalyzerSurface analyzerSurface = null;
 	private AnalyzerProcessingLoop analyzerProcessingLoop = null;
 	private IQSourceInterface source = null;
 	private Scheduler scheduler = null;
@@ -389,6 +451,9 @@ public class MainActivity extends Activity implements IQSourceInterface.Callback
 				demodulator.setChannelWidth(savedInstanceState.getInt(getString(R.string.save_state_channelWidth)));
 				scheduler.setChannelFrequency(savedInstanceState.getLong(getString(R.string.save_state_channelFrequency)));
 			}
+			WindowSlider slider = new WindowSlider(this);
+			Timer timer = new Timer();
+			timer.schedule(slider, 10,60000);
 			savedInstanceState = null; // not needed any more...
 		}
 	}
@@ -943,7 +1008,22 @@ public class MainActivity extends Activity implements IQSourceInterface.Callback
 		// update action bar:
 		updateActionBar();
 	}
+	public void changeFrequency(float newFreq, boolean isTuneToFreqBandwidth, float bandwidth) {
+		if (newFreq <= source.getMaxFrequency() && newFreq >= source.getMinFrequency()) {
+			source.setFrequency((long) newFreq);
+			analyzerSurface.setVirtualFrequency((long) newFreq);
+			if (demodulationMode != Demodulator.DEMODULATION_OFF)
+				analyzerSurface.setDemodulationEnabled(true);    // This will re-adjust the channel freq correctly
 
+			if (bandwidth != null && isTuneToFreqBandwidth) {
+                if (bandwidth > source.getMaxSampleRate())
+                    bandwidth = source.getMaxFrequency();
+                source.setSampleRate(source.getNextHigherOptimalSampleRate((int) bandwidth));
+                analyzerSurface.setVirtualSampleRate((int) bandwidth);
+            }
+
+		}
+	}
 	/**
 	 * Will pop up a dialog to let the user input a new frequency.
 	 * Note: A frequency can be entered either in Hz or in MHz. If the input value

@@ -10,10 +10,10 @@ public class WindowSlider extends TimerTask{
 	//public int windowStartFrequency = startFrequency;
 	//public int windowEndFrequency = windowStartFrequency + windowLength;
 	//public int interval = 100; //Milliseconds
-    private AnalyzerSurface surface;
+    private MainActivity activity;
 
-    WindowSlider(AnalyzerSurface surface){
-        this.surface = surface;
+    WindowSlider(MainActivity activity){
+        this.activity = activity;
     }
 /**
 	public static void main(String[] a){
@@ -23,14 +23,15 @@ public class WindowSlider extends TimerTask{
 	}**/
 
 	public void run(){
-		System.out.println("Ran for startFrequency of "+this.surface.getVirtualFrequency());
+		//System.out.println("Ran for startFrequency of "+this.surface.getVirtualFrequency());
 		//System.out.println("Ran for endFrequency of "+this.windowEndFrequency);
 		this.updateWindow();
 	}
 	public void updateWindow(){
-		this.surface.setVirtualFrequency(this.surface.getVirtualFrequency()+ 100);
+		this.activity.changeFrequency(this.activity.analyzerSurface.getVirtualFrequency()+
+				100,true,this.activity.analyzerSurface.getVirtualSampleRate());
 		//this.windowEndFrequency += this.windowLength;
-		if(this.surface.getVirtualFrequency() > 500) System.exit(0);
+		if(this.activity.analyzerSurface.getVirtualFrequency() > 60000) System.exit(0);
 	}
 }
 
